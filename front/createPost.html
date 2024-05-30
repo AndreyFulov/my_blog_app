@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Пример блога</title>
     <link rel="stylesheet" href="style.css">
-    <script src="my-api.js"></script>
+    <script src="createPost.js"></script>
 </head>
 <body>
     <header>
@@ -22,7 +22,13 @@
         </div>
     </header>
     <section class="main-content">
-        <div class="container" id="post-feed">
+        <div>
+            <form id="myForm">
+                <input type="number" name="id">
+                <input type="text" name="title" placeholder="Заголовок статьи">
+                <textarea name="desc"></textarea>
+                <input type="submit" value="Submit">
+              </form>
         </div>
     </section>
     <footer>

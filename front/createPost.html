@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Пример блога</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="createPostStyle.css">
     <script src="createPost.js"></script>
 </head>
 <body>
@@ -24,10 +25,12 @@
     <section class="main-content">
         <div>
             <form id="myForm">
-                <input type="number" name="id">
+                <input type="number" name="id" placeholder="id">
+                <label for="name">Заголовок статьи</label>
                 <input type="text" name="title" placeholder="Заголовок статьи">
+                <label for="description">Описание</label>
                 <textarea name="desc"></textarea>
-                <input type="submit" value="Submit">
+                <input type="submit" value="Отправить">
               </form>
         </div>
     </section>

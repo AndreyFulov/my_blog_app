@@ -1,5 +1,5 @@
 function fetchPosts() {
-    fetch("http://localhost:8080/posts/")
+    fetch("http://localhost:80/posts/")
         .then(response => response.json())
             .then(data => {
                 data.forEach(post => {

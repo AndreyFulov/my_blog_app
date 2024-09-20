@@ -5,17 +5,16 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
+	"strconv"
+	"time"
 )
 
-type Post struct {
-	ID    string `json:"id"`
-	Title string `json:"title"`
-	Desc  string `json:"desc"`
-}
-
-var posts []Post
-
 func getPosts(w http.ResponseWriter, r *http.Request) {
+	posts, err := db.GetAllPosts()
+	if err != nil {
+		fmt.Println("Error: ", err)
+	}
 	p, err := json.Marshal(posts)
 	if err != nil {
 		fmt.Println("Error: ", err)
@@ -35,20 +34,24 @@ func createPost(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Error: ", err)
 		return
 	}
-	posts = append(posts, post)
+	db.CreatePost(post)
 }
 func getPost(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
-	for _, p := range posts {
-		if p.ID == id {
-			post, err := json.Marshal(p)
-			if err != nil {
-				fmt.Println("Error:", err)
-				return
-			}
-			w.Write(post)
-		}
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	id64 := int64(id)
+	if err != nil {
+		fmt.Println("Error: ", err)
 	}
+	posts, err := db.GetPostByID(id64)
+	if err != nil {
+		fmt.Println("Error: ", err)
+	}
+	post, err := json.Marshal(posts)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	w.Write(post)
 }
 
 func corsMiddleware(next http.Handler) http.Handler {
@@ -70,8 +73,20 @@ func corsMiddleware(next http.Handler) http.Handler {
 	})
 }
 
+var host = os.Getenv("HOST")
+var port = os.Getenv("PORT")
+var user = os.Getenv("USER")
+var password = os.Getenv("PASSWORD")
+var dbname = os.Getenv("DBNAME")
+var sslmode = os.Getenv("SSLMODE")
+var db DataBase
+
 func main() {
-	posts = []Post{{ID: "1", Title: "Hello world!", Desc: "Буквально первый пост в блоге, жесть!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!фвыфвфы"}, {ID: "2", Title: "Тест API", Desc: "Ну это типо второй пост"}}
+	db.InitInfo(host, port, user, password, dbname, sslmode)
+	time.Sleep(5 * time.Second)
+	fmt.Printf("Сервер запущен!")
+	db.CreateTable()
+	time.Sleep(5 * time.Second)
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /posts/", getPosts)
 	mux.HandleFunc("POST /post/", createPost)

@@ -14,7 +14,7 @@ function makePost() {
         var json = JSON.stringify(object);
       
         // Отправляем POST запрос на сервер
-        fetch('http://localhost:8080/post/', {
+        fetch('http://localhost:80/post/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

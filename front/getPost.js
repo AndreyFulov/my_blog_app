@@ -1,7 +1,7 @@
 function fetchPosts() {
     const params = new URLSearchParams(window.location.search);
     const id_param = params.get("id")
-    fetch(`http://localhost:8080/post?id=${id_param}`)
+    fetch(`http://localhost:80/post?id=${id_param}`)
         .then(response => response.json())
             .then(data => {
                 const postInfo = document.createElement('article');
